@@ -1,6 +1,19 @@
 FROM python:3.10
 
-RUN apt-get update && apt-get upgrade
+RUN apt-get update && \
+    apt-get upgrade && \
+    apt-get install -y nginx supervisor
+
+RUN /usr/local/bin/python -m pip install gunicorn==20.1.0 django==3.2.9
+
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+COPY container/files/gunicorn_nginx.conf /etc/nginx/sites-available/gunicorn.conf
+RUN rm /etc/nginx/sites-enabled/default
+RUN ln -s /etc/nginx/sites-available/gunicorn.conf /etc/nginx/sites-enabled/gunicorn.conf
+
+RUN mkdir -p /var/log/supervisor
+COPY container/files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY container/files/gunicorn.conf /etc/supervisor/conf.d/gunicorn.conf
 
 RUN mkdir -p /opt/services/djangoapp/src
 
@@ -16,12 +29,6 @@ RUN groupadd -g 1000 gunicorn && \
     chmod u+x /usr/local/bin/init.sh && \
     chown gunicorn:gunicorn /usr/local/bin/init.sh
 
-USER gunicorn
-
-RUN /usr/local/bin/python -m pip install gunicorn django whitenoise
-
-ENV PATH=/home/gunicorn/.local/bin:$PATH
-
 EXPOSE 8080
 	
-ENTRYPOINT ["init.sh"]
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
