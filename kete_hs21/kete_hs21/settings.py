@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-=h(q@1*n#s=y6ntl43^16=6ufn=66d)_ax$tri2h3!_33b_-lj
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    '127.0.0.1',
     'kete-hs21.azurewebsites.net'
 ]
 
