@@ -19,5 +19,6 @@ from django.urls import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('subtitles/', include('subtitle_builder.urls'))
+    path('subtitles/', include('subtitle_builder.urls')),
+    path('', include('subtitle_builder.urls'))
 ]
