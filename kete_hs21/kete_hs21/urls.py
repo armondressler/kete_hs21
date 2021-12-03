@@ -21,5 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls, name="admin"),
     path('subtitles/', include('subtitle_builder.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('', include("base.urls"), name="home")
+    path('', include("base.urls"))
 ]

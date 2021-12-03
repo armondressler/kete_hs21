@@ -128,6 +128,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static"
+]
+
 #https://docs.djangoproject.com/en/3.2/topics/auth/default/#the-login-required-decorator
 LOGIN_URL = "/login"
 
