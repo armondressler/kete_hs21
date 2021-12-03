@@ -13,11 +13,8 @@ RUN ln -s /etc/nginx/sites-available/gunicorn.conf /etc/nginx/sites-enabled/guni
 
 RUN mkdir -p /var/log/supervisor
 COPY container/files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY container/files/gunicorn.conf /etc/supervisor/conf.d/gunicorn.conf
 
 RUN mkdir -p /opt/services/djangoapp/src
-
-WORKDIR /opt/services/djangoapp/src
 
 COPY container/files/init.sh /usr/local/bin/
 
