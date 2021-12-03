@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="#">Home</a>
+    <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="#">Community</a>
@@ -8,12 +8,12 @@
     <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Einstellungen</a>
     <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="#">Profil</a></li>
+      <li><a class="dropdown-item" href="/profile">Profil</a></li>
       <li><hr class="dropdown-divider"></li>
       <li><a class="dropdown-item" href="https://github.com/armondressler/kete_hs21/blob/main/README.md">About</a></li>
     </ul>
   </li>
     <li class="nav-item">
-    <a class="nav-link" href="#">Logout</a>
+    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
   </li>
 </ul>

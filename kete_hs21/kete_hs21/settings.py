@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from os import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-=h(q@1*n#s=y6ntl43^16=6ufn=66d)_ax$tri2h3!_33b_-lj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if environ.get("DJANGO_DEBUG", "false") == "true".lower():
+    DEBUG = True
+else:
+    DEBUG = False
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
@@ -123,6 +127,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#https://docs.djangoproject.com/en/3.2/topics/auth/default/#the-login-required-decorator
+LOGIN_URL = "/login"
+
+LOGIN_REDIRECT_URL = "/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
