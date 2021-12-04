@@ -1,19 +1,31 @@
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Home</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">Community</a>
-  </li>
-    <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Einstellungen</a>
-    <ul class="dropdown-menu">
-      <li><a class="dropdown-item" href="/profile">Profil</a></li>
-      <li><hr class="dropdown-divider"></li>
-      <li><a class="dropdown-item" href="https://github.com/armondressler/kete_hs21/blob/main/README.md">About</a></li>
-    </ul>
-  </li>
-    <li class="nav-item">
-    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-  </li>
-</ul>
+{% load static %}
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'dashboard' %}"><img class="mb-4" src="{% static 'images/logo_medium.jpg' %}" alt="Logo goes here" style="object-fit: scale-down"></a>
+    <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'dashboard' %}">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'about' %}">About</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdown01">
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="#">Messages</a></li>
+            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
