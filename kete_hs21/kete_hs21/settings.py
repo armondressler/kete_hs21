@@ -40,6 +40,7 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
     'subtitle_builder.apps.SubtitleBuilderConfig',
     'base.apps.BaseConfig',
+    'accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -133,9 +134,9 @@ STATICFILES_DIRS = [
 ]
 
 #https://docs.djangoproject.com/en/3.2/topics/auth/default/#the-login-required-decorator
-LOGIN_URL = "/login"
+LOGIN_URL = "/accounts/login"
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/dashboard"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

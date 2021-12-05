@@ -1,17 +1,14 @@
 {% load static %}
-<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation" style="padding-bottom: 2px; padding-top: 2px;">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'dashboard' %}"><img class="mb-4" src="{% static 'images/logo_medium.jpg' %}" alt="Logo goes here" style="object-fit: scale-down"></a>
+    <a class="navbar-brand" href="{% url 'dashboard' %}"><img class="mb-1 ketehs21-logo-medium" src="{% static 'images/logo_medium.jpg' %}" alt="Logo goes here" style="width: 160px; height: auto;"></a>
     <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav me-auto mb-1 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'dashboard' %}">Dashboard</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'about' %}">About</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
@@ -20,6 +17,9 @@
             <li><a class="dropdown-item" href="#">Messages</a></li>
             <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
           </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'about' %}">About</a>
         </li>
       </ul>
       <form class="d-flex">
