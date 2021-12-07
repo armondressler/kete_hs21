@@ -6,5 +6,12 @@
 {% endblock %}
 
 {% block content %}
+<h1>Favourite or new classes will be listed here, </h1>
+<h1>groups:
+    {% for group in request.user.groups.all %}
+    {{ group.name }}
+{% endfor %}
+
+</h1>
 
 {% endblock %}

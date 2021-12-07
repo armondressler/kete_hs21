@@ -1,0 +1,14 @@
+{% extends "base/base.html" %}
+
+{% block title %}Courses{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+ <form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+{{ course_form }}
+<button class="btn btn-primary my-4" type="submit">Submit</button>
+ </form>
+{% endblock %}

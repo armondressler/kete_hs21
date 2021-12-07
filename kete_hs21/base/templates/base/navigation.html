@@ -5,15 +5,19 @@
     <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+    {% with request.resolver_match.view_name as view_name %}
     <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav me-auto mb-1 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'dashboard' %}">Dashboard</a>
+          <a class="nav-link {% if view_name == 'dashboard' %}active{% endif %}" aria-current="page" href="{% url 'dashboard' %}">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% if view_name == 'courses' %}active{% endif %}" aria-current="page" href="{% url 'courses' %}">Courses</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
+          <a class="nav-link dropdown-toggle {% if view_name in 'settings' %}active{% endif %}" href="{% url 'settings' %}" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
           <ul class="dropdown-menu" aria-labelledby="dropdown01">
-            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="{% url 'settings' %}">Settings</a></li>
             <li><a class="dropdown-item" href="#">Messages</a></li>
             <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
           </ul>
@@ -27,5 +31,6 @@
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
     </div>
+    {% endwith %}
   </div>
 </nav>

@@ -1,0 +1,14 @@
+{% extends "base/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<h1>User settings can be viewed / modified here</h1>
+{{ user.profile.deleteme }}
+{{ user.profile.another }}
+{{ user.username }}
+
+{% endblock %}
