@@ -6,14 +6,13 @@ from base.models import Profile
 
 class Course(models.Model):
     name = models.CharField(max_length=256, unique=True)
-    description = models.TextField(null=True, max_length=2048)
-    image = models.ImageField(null=True)
-    tags = TaggableManager()
-    date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name="course_created_by")
-    responsible_teachers = models.ManyToManyField(Profile, through="CourseResponsibleTeachers", related_name="course_responsible_teacher")
-    subscribed_students = models.ManyToManyField(Profile, through="CourseSubscribedStudents", related_name="course_subscribed_students")
+    description = models.TextField(null=True, blank=True, max_length=2048, verbose_name="Beschreibung")
+    tags = TaggableManager(blank=True)
+    date_created = models.DateTimeField(auto_now_add=True, verbose_name="Erstellt am")
+    date_modified = models.DateTimeField(auto_now_add=True, verbose_name="Angepasst am")
+    created_by = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name="course_created_by", verbose_name="erstellt von")
+    responsible_teachers = models.ManyToManyField(Profile, through="CourseResponsibleTeachers", related_name="course_responsible_teacher", verbose_name="Verantwortliche Dozenten")
+    subscribed_students = models.ManyToManyField(Profile, through="CourseSubscribedStudents", related_name="course_subscribed_students", verbose_name="Eingeschriebene Studenten")
 
 
 class Lesson(models.Model):

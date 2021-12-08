@@ -6,7 +6,6 @@ body {
 body {
   display: flex;
   align-items: center;
-  padding-top: 40px;
   padding-bottom: 40px;
   background-color: #d3afab;
 }
@@ -50,4 +49,8 @@ body {
 
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+.card {
+  box-sizing: content-box;
 }

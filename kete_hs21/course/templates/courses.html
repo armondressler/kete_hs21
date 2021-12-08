@@ -7,21 +7,33 @@
 
 {% block content %}
 
-<a href="{% url 'courses_create' %}">Add</a>
-<br>
-  <div class="container">
-    <div class="row row-cols-3 row-cols-md-3">
-      {% for course in courses %}
-        <div class="card border-dark mb-3 m-2" >
-      <div class="card-header">Course</div>
-      <div class="card-body text-dark">
-        <h5 class="card-title">{{ course.name }}</h5>
-        <p class="card-text">{{ course.description }}</p>
-        <p class="card-text"><small class="text-muted">Created by: {{ course.created_by.user }}</small></p>
-        <a href="#" class="btn btn-primary">Subscribe</a>
-        <a href="#" class="btn btn-primary">Edit</a>
+  <div class="container pt-1">
+    <div class="row row-cols-4 row-cols-md-4">
+      {% if is_teacher %}
+      <div class="card border-dark mb-3 m-2">
+        <div class="card-header">Neues Modul</div>
+        <div class="card-body text-dark">
+          <h5 class="card-title"></h5>
+
+          <a href="{% url 'courses_create' %}" class="btn btn-primary">Erstellen</a>
+        </div>
       </div>
-    </div>
+      {% endif %}
+      {% for course in courses %}
+      <div class="card border-dark mb-3 m-2">
+        <div class="card-header">
+          Modul
+        </div>
+        <div class="card-body text-dark">
+          <h5 class="card-title"><strong>{{ course.name }}</strong></h5>
+          <p class="card-text">{{ course.description }}</p>
+          <p class="card-text"><small class="text-muted">Erstellt von: {{ course.created_by.user }}<br>Erstellt am: {{ course.date_created }}</small></p>
+          {% if is_teacher %}
+          <a href="{% url 'courses_update' course_id=course.id  %}" class="btn btn-primary">Editieren</a>
+          <a href="{% url 'lessons_create' course_id=course.id  %}" class="btn btn-primary">Lektion hinzufügen</a>
+          {% else %}<a href="#" class="btn btn-primary mt-1">Abonnieren</a>{% endif %}
+        </div>
+      </div>
     {% endfor %}
     </div>
   </div>

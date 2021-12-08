@@ -1,6 +1,6 @@
 {% extends "base/base.html" %}
 
-{% block title %}Module{% endblock %}
+{% block title %}Lektionen{% endblock %}
 
 {% block head %}
 {% endblock %}
@@ -9,13 +9,13 @@
 {% load crispy_forms_tags %}
 <div class="container pt-1">
  <div class="py-5 text-center">
-  <h2>Neues Modul</h2>
+  <h2>Neue Lektion</h2>
   </div>
  <div class="row g-5 justify-content-md-center">
   <div class="col-sm-6">
   <form method="post" enctype="multipart/form-data">
    {% csrf_token %}
-   {{ course_form|crispy }}
+   {{ lesson_form|crispy }}
   <button class="btn btn-primary my-4" type="submit">Erstellen</button>
   </form>
    </div>

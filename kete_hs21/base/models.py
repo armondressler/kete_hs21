@@ -8,6 +8,11 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField(null=True, blank=True)
 
+    def __str__(self):
+        if self.user.first_name or self.user.last_name:
+            full_name = self.user.first_name + " " + self.user.last_name
+            return f"{self.user.username} ({full_name})"
+        return f"{self.user.username}"
 
 
 @receiver(post_save, sender=User)

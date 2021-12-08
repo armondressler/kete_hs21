@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'subtitle_builder.apps.SubtitleBuilderConfig',
     'base.apps.BaseConfig',
     'course.apps.CourseConfig',
+    'lesson.apps.LessonConfig',
     'accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,7 +49,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'taggit'
+    'taggit',
+    "crispy_forms",
+    "crispy_bootstrap5",
 ]
 
 MIDDLEWARE = [
@@ -144,3 +147,8 @@ LOGIN_REDIRECT_URL = "/dashboard"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#https://github.com/django-crispy-forms/crispy-bootstrap5
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"

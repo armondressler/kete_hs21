@@ -9,14 +9,14 @@
 {% load crispy_forms_tags %}
 <div class="container pt-1">
  <div class="py-5 text-center">
-  <h2>Neues Modul</h2>
+  <h2>Modul {{ course.name }} anpassen</h2>
   </div>
  <div class="row g-5 justify-content-md-center">
   <div class="col-sm-6">
   <form method="post" enctype="multipart/form-data">
    {% csrf_token %}
    {{ course_form|crispy }}
-  <button class="btn btn-primary my-4" type="submit">Erstellen</button>
+  <button class="btn btn-primary my-4" type="submit">Bestätigen</button>
   </form>
    </div>
  </div>
