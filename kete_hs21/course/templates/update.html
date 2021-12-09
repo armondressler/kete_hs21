@@ -17,6 +17,8 @@
    {% csrf_token %}
    {{ course_form|crispy }}
   <button class="btn btn-primary my-4" type="submit">Bestätigen</button>
+  <a href="{% url 'courses' %}"><button type="button" class="btn btn-primary my-4">Abbrechen</button></a>
+   <a href="{% url 'courses_delete' course_id=course.id %}"><button type="button" class="btn btn-primary my-4">Löschen</button></a>
   </form>
    </div>
  </div>

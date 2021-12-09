@@ -7,7 +7,7 @@
 
 {% block content %}
 {% load crispy_forms_tags %}
-<div class="container pt-1">
+<div class="container" style="margin-top: 150px">
  <div class="py-5 text-center">
   <h2>Neue Lektion</h2>
   </div>
@@ -15,7 +15,38 @@
   <div class="col-sm-6">
   <form method="post" enctype="multipart/form-data">
    {% csrf_token %}
-   {{ lesson_form|crispy }}
+   {{ lesson_form.name|as_crispy_field }}
+   {{ lesson_form.description|as_crispy_field }}
+   {{ lesson_form.tags|as_crispy_field }}
+   <div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+     <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+        Aufnahme hinzufügen
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        {{ recording_form.recording_name|as_crispy_field }}
+        {{ recording_form.recording_description|as_crispy_field }}
+        {{ recording_form.recording_file|as_crispy_field }}
+      </div>
+    </div>
+    </div>
+    <div class="accordion-item">
+     <h2 class="accordion-header" id="headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        Foliensatz hinzufügen
+      </button>
+    </h2>
+    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        {{ slideshow_form.slideshow_name|as_crispy_field }}
+        {{ slideshow_form.slideshow_file|as_crispy_field }}
+      </div>
+    </div>
+    </div>
+   </div>
   <button class="btn btn-primary my-4" type="submit">Erstellen</button>
   </form>
    </div>

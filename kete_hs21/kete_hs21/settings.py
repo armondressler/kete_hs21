@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 from os import environ
+from django.core.management import utils
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,19 +22,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=h(q@1*n#s=y6ntl43^16=6ufn=66d)_ax$tri2h3!_33b_-lj'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if environ.get("DJANGO_DEBUG", "false") == "true".lower():
     DEBUG = True
+    SECRET_KEY = "django-insecure-=e(1cq5*00gqei$a2(u9v2g1q#9fj4^*$*s=)0shllo*6weqtd^"
 else:
     DEBUG = False
+    SECRET_KEY = f"django-insecure-={utils.get_random_secret_key()}"
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
     'kete-hs21.azurewebsites.net'
 ]
-
 
 # Application definition
 
@@ -152,3 +154,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+#Media upload
+
+MEDIA_URL = "/media/"
+
+MEDIA_ROOT = BASE_DIR / "media"
+
+RECORDINGS_ROOT = MEDIA_ROOT / "recordings"
+
+SLIDESHOWS_ROOT = MEDIA_ROOT / "slideshows"
+
+import os
+for media_dir in (MEDIA_ROOT, RECORDINGS_ROOT, SLIDESHOWS_ROOT):
+    if not os.path.isdir(media_dir):
+        os.mkdir(media_dir)

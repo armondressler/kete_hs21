@@ -20,7 +20,7 @@
       </div>
       {% endif %}
       {% for course in courses %}
-      <div class="card border-dark mb-3 m-2">
+      <div class="card border-dark mb-3 m-2"  onclick="location.href='{% url 'lessons' course_id=course.id  %}';" style="cursor: pointer;">
         <div class="card-header">
           Modul
         </div>

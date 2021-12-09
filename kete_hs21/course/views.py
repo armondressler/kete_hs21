@@ -16,6 +16,12 @@ def courses(request):
     }
     return render(request=request, template_name="courses.html", context=context)
 
+@login_required()
+def delete(request, course_id):
+    obj = get_object_or_404(Course, id=course_id)
+    obj.delete()
+    return redirect(courses)
+
 @login_required
 def create(request):
     if request.method == "POST":

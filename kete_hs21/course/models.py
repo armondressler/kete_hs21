@@ -18,8 +18,8 @@ class Course(models.Model):
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     name = models.CharField(max_length=256)
-    description = models.TextField(null=True, max_length=2048)
-    tags = TaggableManager()
+    description = models.TextField(null=True, max_length=2048, verbose_name="Beschreibung")
+    tags = TaggableManager(blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now_add=True)
 
@@ -35,15 +35,16 @@ class CourseSubscribedStudents(models.Model):
 
 
 class Recording(models.Model):
-    name = models.CharField(max_length=256)
-    description = models.TextField(null=True, max_length=2048)
-    tags = TaggableManager()
+    recording_name = models.CharField(max_length=256, blank=True)
+    recording_description = models.TextField(null=True, max_length=2048, verbose_name="Beschreibung", blank=True)
+    recording_tags = TaggableManager(blank=True)
+    recording_file = models.FileField(verbose_name="Aufnahme", default=None, blank=True)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
 
 
-class Slidesshow(models.Model):
-    name = models.CharField(max_length=256)
-    description = models.TextField(null=True, max_length=2048)
-    tags = TaggableManager()
+class Slideshow(models.Model):
+    slideshow_name = models.CharField(max_length=256, blank=True)
+    slideshow_tags = TaggableManager(blank=True)
+    slideshow_file = models.FileField(verbose_name="Foliensatz", default=None, blank=True)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
 
