@@ -3,6 +3,8 @@
 {% block title %}Courses{% endblock %}
 
 {% block head %}
+<link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -12,18 +14,18 @@
     </a>
     <div class="list-group list-group-flush scrollarea">
       {% for lesson in lessons %}
-        <div class="mt-1">
-        <a href="#" class="list-group-item list-group-item-action active py-3 lh-tight" aria-current="true">
-        <div class="d-flex flex-nowrap">
-          <strong class="col-9 mb-1">{{ lesson.name }}</strong>
-          <small>{{ lesson.date_created }}</small>
+        <div class="mt-1 lesson-container" recordings_url="{{ recordings_url }}" recording_video_archived_name="{{ lesson.recording_set.first.recording_video_archived_name|default_if_none:'nothing' }}">
+            <a href="#" class="list-group-item list-group-item-action active py-3 lh-tight" aria-current="true">
+                <div class="d-flex flex-nowrap">
+                  <strong class="col-9 mb-1">{{ lesson.name }}</strong>
+                  <small>{{ lesson.date_created }}</small>
+                </div>
+                <div class="d-flex flex-nowrap">
+                    <div class="col-9 mb-1 small">{{ lesson.description }}</div>
+                    <div>{% if is_teacher %}<a class="bg-transparent" href="{% url 'lessons_delete' course_id=course.id lesson_id=lesson.id %}"><button type="button" class="btn btn-warning">Löschen</button></a>{% endif %}</div>
+                </div>
+            </a>
         </div>
-        <div class="d-flex flex-nowrap">
-            <div class="col-9 mb-1 small">{{ lesson.description }}</div>
-            <div>{% if is_teacher %}<a class="bg-transparent" href="{% url 'lessons_delete' course_id=course.id lesson_id=lesson.id %}"><button type="button" class="btn btn-warning">Löschen</button></a>{% endif %}</div>
-        </div>
-      </a>
-            </div>
         <!--
       <a href="#" class="list-group-item list-group-item-action active py-3 lh-tight rounded-3" aria-current="true">
         <div class="d-flex w-100 align-items-center justify-content-between">
@@ -45,5 +47,39 @@
       </a>
       -->
     </div>
-  </div>
+</div>
+
+<div class="video-container d-flex justify-content-center  col-8 m-5">
+</div>
+
+
+
+<script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
+<script>
+
+$(".lesson-container").each(function() {
+    $(this).click(function() {
+        var video_path = $(this).attr("recordings_url") + "/" + $(this).attr("recording_video_archived_name")
+        html_template = `<video
+                width="auto"
+                height="auto
+                id="my-video"
+                class="video-js vjs-fill rounded-3"
+                controls
+                preload="auto"
+                data-setup='{"fluid": true, "width": auto, "height": auto}'>
+                <source src="${video_path}" type="video/mp4"/>
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider upgrading to a
+                  web browser that
+                  <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                </p>
+            </video>`
+        console.log(html_template);
+        $(".video-container").html("");
+        $(".video-container").append(html_template);
+    });
+});
+</script>
+
 {% endblock %}

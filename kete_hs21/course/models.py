@@ -1,5 +1,6 @@
 from django.db import models
 from taggit.managers import TaggableManager
+from django.core.validators import FileExtensionValidator
 
 from base.models import Profile
 
@@ -39,6 +40,11 @@ class Recording(models.Model):
     recording_description = models.TextField(null=True, max_length=2048, verbose_name="Beschreibung", blank=True)
     recording_tags = TaggableManager(blank=True)
     recording_file = models.FileField(verbose_name="Aufnahme", default=None, blank=True)
+    recording_video_archived_name = models.CharField(max_length=256, blank=True)
+    recording_audio_archived_name = models.CharField(max_length=512, blank=True)
+    recording_text_archived_name = models.CharField(max_length=512, blank=True)
+    recording_audio_split_task_status = models.CharField(max_length=256, blank=True)
+    recording_audio_to_text_task_status = models.CharField(max_length=256, blank=True)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
 
 
