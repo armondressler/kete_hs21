@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 from os import environ
 from django.core.management import utils
+import logging
+
+logger = logging.getLogger(__name__)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -155,9 +158,19 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+#FFMPEG
+FFMPEG_PATH = environ.get("DJANGO_FFMPEG_PATH")
+if not FFMPEG_PATH:
+    logger.warning("Cannot determine ffmpeg binary location, DJANGO_FFMPEG_PATH env not set")
+
+
 #Media upload
 
 MEDIA_URL = "/media/"
+
+RECORDINGS_URL = MEDIA_URL + "recordings"
+
+SLIDESHOWS_URL = MEDIA_URL + "slideshows"
 
 MEDIA_ROOT = BASE_DIR / "media"
 
@@ -168,4 +181,17 @@ SLIDESHOWS_ROOT = MEDIA_ROOT / "slideshows"
 import os
 for media_dir in (MEDIA_ROOT, RECORDINGS_ROOT, SLIDESHOWS_ROOT):
     if not os.path.isdir(media_dir):
+        logger.info(f"Creating missing MEDIA_DIRS {MEDIA_ROOT}, {RECORDINGS_ROOT}, {SLIDESHOWS_ROOT}")
         os.mkdir(media_dir)
+
+
+#Azure TTS API
+AZURE_BLOB_CONTAINER_URL = "https://defaultst01.blob.core.windows.net/speech-to-text-audiofiles"
+
+AZURE_STORAGE_ACCOUNT_SAS_QUERY_STRING = environ.get("DJANGO_STORAGE_ACCOUNT_SAS_QUERY_STRING")
+if not AZURE_STORAGE_ACCOUNT_SAS_QUERY_STRING:
+    logger.warning("No azure TTS api key provided, DJANGO_STORAGE_ACCOUNT_SAS_QUERY_STRING env not set")
+
+AZURE_OCP_APIM_SUBSCRIPTION_KEY = environ.get("DJANGO_OCP_APIM_SUBSCRIPTION_KEY")
+if not AZURE_OCP_APIM_SUBSCRIPTION_KEY:
+    logger.warning("No azure TTS api key provided, DJANGO_OCP_APIM_SUBSCRIPTION_KEY env not set")

@@ -17,11 +17,18 @@ from django.contrib import admin
 from django.urls import path
 from django.urls import include
 
+
 urlpatterns = [
     path('admin/', admin.site.urls, name="admin"),
     path('subtitles/', include('subtitle_builder.urls')),
     path('accounts/', include('accounts.urls')),
     path('courses/', include('course.urls')),
     path('courses/<int:course_id>/lessons/', include("lesson.urls")),
-    path('', include("base.urls"))
+    path('', include("base.urls")),
 ]
+
+from django.conf import settings
+if settings.DEBUG:
+    from django.urls import re_path
+    from django.views.static import serve
+    urlpatterns.append(re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}))
