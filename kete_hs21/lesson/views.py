@@ -6,7 +6,7 @@ import logging
 
 import requests
 
-from webvtt_utils import create_vtt_from_azure_output
+from .webvtt_utils import create_vtt_from_azure_output
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
