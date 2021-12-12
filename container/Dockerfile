@@ -2,7 +2,7 @@ FROM python:3.10
 
 RUN apt-get update && \
     apt-get upgrade && \
-    apt-get install -y nginx supervisor
+    apt-get install -y nginx supervisor ffmpeg
 
 RUN /usr/local/bin/python -m pip install gunicorn==20.1.0 django==3.2.9
 
@@ -19,6 +19,9 @@ RUN mkdir -p /opt/services/djangoapp/src
 COPY container/files/init.sh /usr/local/bin/
 
 COPY kete_hs21 /opt/services/djangoapp/src
+COPY requirements.txt /tmp/
+
+RUN /usr/local/bin/python -m pip install -r /tmp/requirements.txt
 
 RUN groupadd -g 1000 gunicorn && \
     useradd -m -u 1000 -g gunicorn gunicorn && \
