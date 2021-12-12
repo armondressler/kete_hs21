@@ -8,59 +8,93 @@
 {% endblock %}
 
 {% block content %}
-<div class="d-block align-items-stretch bg-transparent rounded-3" style="width: 380px; height: 1200px; margin-top:100px">
+{% load static %}
+<div class="d-block align-items-stretch bg-transparent mx-1 " style="width: 380px; height: 1200px; margin-top:100px">
     <a class="d-block align-items-center link-dark text-decoration-none text-center">
       <span class="fs-5 fw-semibold">Verfügbare Lektionen</span>
     </a>
     <div class="list-group list-group-flush scrollarea">
       {% for lesson in lessons %}
-        <div class="mt-1 lesson-container" recordings_url="{{ recordings_url }}" recording_video_archived_name="{{ lesson.recording_set.first.recording_video_archived_name|default_if_none:'nothing' }}">
-            <a href="#" class="list-group-item list-group-item-action active py-3 lh-tight" aria-current="true">
-                <div class="d-flex flex-nowrap">
-                  <strong class="col-9 mb-1">{{ lesson.name }}</strong>
-                  <small>{{ lesson.date_created }}</small>
+        <div class="lesson-container list-group-item list-group-item-action border-0 mt-3 rounded-3" lesson_id="{{ lesson.id }}" recordings_url="{{ recordings_url }}" recording_video_archived_name="{{ lesson.recording_set.first.recording_video_archived_name|default_if_none:'nothing' }}">
+            <div class="w-100 d-flex flex-column">
+                <div class="d-inline-flex flex-row flex-nowrap py-2">
+                    <h5 class="col-6 flex-fill">{{ lesson.name }}</h5>
+                    <small class="flex-fill col-6 ms-auto">{{ lesson.date_created }}</small>
                 </div>
-                <div class="d-flex flex-nowrap">
-                    <div class="col-9 mb-1 small">{{ lesson.description }}</div>
-                    <div>{% if is_teacher %}<a class="bg-transparent" href="{% url 'lessons_delete' course_id=course.id lesson_id=lesson.id %}"><button type="button" class="btn btn-warning">Löschen</button></a>{% endif %}</div>
+                <div class="d-inline-flex flex-row flex-nowrap">
+                    <p class="col-7 lesson-description">{{ lesson.description }}</p>
+                    <svg width="30" height="30" class="d-inline col-1 lesson-recording-error-icon d-none">
+                        <image xlink:href="{% static 'images/error-icon.svg' %}" class="" width="30" height="30"/>
+                    </svg>
+                    <svg width="30" height="30" class="d-inline col-1 lesson-recording-icon d-none">
+                        <image xlink:href="{% static 'images/recording-icon.svg' %}" class="" width="30" height="30"/>
+                    </svg>
+                    <div class="lesson-recording-status d-inline-flex col-5 d-none">
+                        <small class="mx-2 lesson-recording-status-text">STATUS TEXT</small>
+                        <div class="col-9 spinner-border text-info" role="status"></div>
+                    </div>
+                    {% if is_teacher %}
+                    <a href="{% url 'lessons_delete' course_id=course.id lesson_id=lesson.id %}" class="btn btn-primary bg-warning text-dark border-0 col-3 ms-auto">Löschen</a>
+                    {% endif %}
                 </div>
-            </a>
+            </div>
         </div>
-        <!--
-      <a href="#" class="list-group-item list-group-item-action active py-3 lh-tight rounded-3" aria-current="true">
-        <div class="d-flex w-100 align-items-center justify-content-between">
-          <strong class="mb-1">{{ lesson.name }}</strong>
-          <small>{{ lesson.date_created }}</small>
-        </div>
-        <div class="col-10 mb-1 small">{{ lesson.description }}</div>
-        <div class="col-12  d-flex">{% if is_teacher %}<a class="bg-transparent" href="{% url 'lessons_delete' course_id=course.id lesson_id=lesson.id %}"><button type="button" class="btn btn-warning">Löschen</button></a>{% endif %}</div>
-      </a>
-    -->
       {% endfor %}
-      <!--
-      <a href="#" class="list-group-item list-group-item-action py-3 lh-tight">
-        <div class="d-flex w-100 align-items-center justify-content-between">
-          <strong class="mb-1">List group item heading</strong>
-          <small class="text-muted">Tues</small>
-        </div>
-        <div class="col-10 mb-1 small">placeholder</div>
-      </a>
-      -->
     </div>
 </div>
 
-<div class="video-container d-flex justify-content-center  col-8 m-5">
+<div class="d-block w-75 mx-5" style="margin-top: 400px; margin-bottom: 600px">
+<div class="d-inline-flex flex-nowrap w-75" >
+    <div class="video-container flex-fill"></div>
 </div>
-
-
+</div>
 
 <script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
 <script>
 
+
+(function poll_details() {
+  $.get('{% url 'lessons_details' course_id=course.id %}', function(data) {
+   for (var completed_lesson_id of data.completed) {
+         	$("[lesson_id=" + completed_lesson_id + "]").each(function() {
+         	    $(this).find(".lesson-recording-icon").removeClass("d-none");
+                $(this).find(".lesson-description").removeClass("d-none");
+         	    $(this).find(".lesson-recording-status").addClass("d-none");
+         	});
+   }
+   for (var in_progress_lesson_id of [...data.split_in_progress, ...data.tts_in_progress]) {
+         	$("[lesson_id=" + in_progress_lesson_id + "]").each(function() {
+         	    $(this).find(".lesson-description").addClass("d-none");
+         	    $(this).find(".lesson-recording-status").removeClass("d-none");
+         	    $(this).find(".lesson-recording-status-text").html("Aufnahme wird verarbeitet...");
+         	});
+   };
+   for (var in_error_lesson_id of [...data.split_in_error, ...data.tts_in_error]) {
+         	$("[lesson_id=" + in_error_lesson_id + "]").each(function() {
+         	    $(this).find(".lesson-recording-error-icon").removeClass("d-none");
+         	});
+   };
+   setTimeout(poll_details, 5000);
+  });
+})();
+
+
 $(".lesson-container").each(function() {
-    $(this).click(function() {
+    $( this ).click(function() {
+        $(".lesson-container").each(function() {
+            $( this ).attr("aria-current","false")
+            $( this ).removeClass("active");
+        });
+        $(this).addClass("active");
+        $(this).attr("aria-current","true")
+        $(".video-container").html("");
+        if(! $(this).attr("recording_video_archived_name")) {
+            var html_template =`<div class="alert alert-warning" role="alert">Keine Aufzeichnung hinterlegt.</div>`;
+            $(".video-container").append(html_template);
+            return;
+        }
         var video_path = $(this).attr("recordings_url") + "/" + $(this).attr("recording_video_archived_name")
-        html_template = `<video
+        var html_template = `<video
                 width="auto"
                 height="auto
                 id="my-video"
@@ -75,8 +109,6 @@ $(".lesson-container").each(function() {
                   <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
                 </p>
             </video>`
-        console.log(html_template);
-        $(".video-container").html("");
         $(".video-container").append(html_template);
     });
 });

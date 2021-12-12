@@ -54,3 +54,8 @@ body {
 .card {
   box-sizing: content-box;
 }
+
+.lesson-container:hover {
+    cursor: pointer;
+    background-color: #ccc;
+}
