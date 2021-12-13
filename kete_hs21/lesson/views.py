@@ -12,6 +12,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
+from django.http import JsonResponse
 
 from course.models import Course, Lesson, Recording
 from lesson.forms import LessonForm, RecordingForm, SlideshowForm
@@ -167,6 +168,26 @@ def _deprecated_fetch_via_azure_speech_to_text_api(tts_api_url, tts_api_key, aud
     except (requests.HTTPError, requests.ConnectionError) as err:
         raise ValueError(f"Failed to translate audio to text for file {audio_file_path}: {err}")
     return str(response.text)
+
+
+def details(request, course_id):
+    corresponding_course = get_object_or_404(Course, id=course_id)
+    lessons_of_course = Lesson.objects.filter(course=corresponding_course)
+    recordings_of_lessons = Recording.objects.filter(lesson__in=lessons_of_course)
+    recordings_in_progress_tts = recordings_of_lessons.filter(recording_audio_to_text_task_status='in progress')
+    recordings_in_progress_split = recordings_of_lessons.filter(recording_audio_split_task_status='in progress')
+    recordings_in_error_split = recordings_of_lessons.filter(recording_audio_split_task_status='error')
+    recordings_in_error_tts = recordings_of_lessons.filter(recording_audio_to_text_task_status='error')
+    recordings_in_completed = recordings_of_lessons.filter(recording_audio_to_text_task_status='completed')
+
+    response_dict = {
+        "split_in_progress": [recording.lesson.id for recording in recordings_in_progress_split],
+        "tts_in_progress": [recording.lesson.id for recording in recordings_in_progress_tts],
+        "split_in_error": [recording.lesson.id for recording in recordings_in_error_split],
+        "tts_in_error": [recording.lesson.id for recording in recordings_in_error_tts],
+        "completed": [recording.lesson.id for recording in recordings_in_completed]
+    }
+    return JsonResponse(response_dict)
 
 
 def translate_audio_to_text(recording_object_id):
