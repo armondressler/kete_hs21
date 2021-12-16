@@ -46,6 +46,7 @@ def update(request, course_id):
     if form.is_valid():
         obj = form.save(commit=False)
         obj.save()
+        form.save_m2m()
         messages.success(request, "Modul erfolgreich angepasst.")
         context = {'course_form': form}
         return redirect(courses)
