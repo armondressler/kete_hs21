@@ -11,11 +11,15 @@
 {% load static %}
 <div class="d-block align-items-stretch bg-transparent mx-1 " style="width: 380px; height: 1200px; margin-top:100px">
     <a class="d-block align-items-center link-dark text-decoration-none text-center">
-      <span class="fs-5 fw-semibold">Verfügbare Lektionen</span>
+      <span class="fs-5 fw-semibold">Verfügbare Lektionen: {{ course.name }}</span>
     </a>
     <div class="list-group list-group-flush scrollarea">
       {% for lesson in lessons %}
-        <div class="lesson-container list-group-item list-group-item-action border-0 mt-3 rounded-3" lesson_id="{{ lesson.id }}" recordings_url="{{ recordings_url }}" recording_video_archived_name="{{ lesson.recording_set.first.recording_video_archived_name|default_if_none:'nothing' }}">
+        <div class="lesson-container list-group-item list-group-item-action border-0 mt-3 rounded-3"
+             lesson_id="{{ lesson.id }}"
+             recordings_url="{{ recordings_url }}"
+             recording_video_archived_name="{{ lesson.recording_set.first.recording_video_archived_name|default_if_none:'nothing' }}"
+             recording_text_archived_name="{{ lesson.recording_set.first.recording_text_archived_name|default_if_none:'nothing' }}">
             <div class="w-100 d-flex flex-column">
                 <div class="d-inline-flex flex-row flex-nowrap py-2">
                     <h5 class="col-6 flex-fill">{{ lesson.name }}</h5>
@@ -43,15 +47,101 @@
     </div>
 </div>
 
-<div class="d-block w-75 mx-5" style="margin-top: 400px; margin-bottom: 600px">
-<div class="d-inline-flex flex-nowrap w-75" >
-    <div class="video-container flex-fill"></div>
+<div class="d-block w-75 mx-5 justify-content-start" style="margin-top:150px">
+    <div class="d-flex flex-nowrap flex-column" style="width: 66%">
+        <div class="video-container flex-fill">
+        <video  id="videojs-player" width="auto" height="auto" class="video-js vjs-fill rounded-3 d-none" controls preload="auto"></video>
+        </div>
+        <div id="subtitles-container" class="d-flex flex-row mt-3 d-none">
+            <div class="card w-100">
+              <ul class="list-group list-group-flush">
+                  <li class="list-group-item border-0">
+                    <textarea id="subtitle-current" class="border-0 w-100 fs-6" rows="3" readonly contenteditable="false" style="resize: none;"></textarea>
+                  </li>
+                  <li class="list-group-item border-0">
+                    <textarea id="subtitle-previous" class="border-0 w-100 fs-6" rows="3" readonly contenteditable="false" style="resize: none;"></textarea>
+                  </li>
+              </ul>
+            </div>
+            <div class="d-flex flex-column justify-content-evenly mx-3">
+                <button class="btn btn-lg btn-outline-dark mb-3" type="button" title="Dozenten zu diesem Abschnitt anfragen." data-bs-toggle="modal" data-bs-target="#teacher-request">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" fill="currentColor" class="bi bi-bookmark-star" viewBox="0 0 16 16">
+                      <path d="M7.84 4.1a.178.178 0 0 1 .32 0l.634 1.285a.178.178 0 0 0 .134.098l1.42.206c.145.021.204.2.098.303L9.42 6.993a.178.178 0 0 0-.051.158l.242 1.414a.178.178 0 0 1-.258.187l-1.27-.668a.178.178 0 0 0-.165 0l-1.27.668a.178.178 0 0 1-.257-.187l.242-1.414a.178.178 0 0 0-.05-.158l-1.03-1.001a.178.178 0 0 1 .098-.303l1.42-.206a.178.178 0 0 0 .134-.098L7.84 4.1z"></path>
+                      <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"></path>
+                    </svg>
+                </button>
+                <button class="btn btn-lg btn-outline-dark mb-3" type="button" title="Diskussion zu diesem Abschnitt starten.">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" fill="currentColor" class="bi bi-chat-dots" viewBox="0 0 16 16">
+                        <path d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"></path>
+                        <path d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125zm.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+<div class="modal fade" id="teacher-request" tabindex="-1" aria-labelledby="teacher-request-label" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="teacher-request-label">Neue Anfrage</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Dozenten:</label>
+            <input type="text" class="form-control" id="recipient-name" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="video-timestamp" class="col-form-label">Abschnitt:</label>
+            <input type="text" class="form-control" id="video-timestamp" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="message-text" class="col-form-label">Anfrage:</label>
+            <textarea class="form-control" rows="5" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schliessen</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Senden</button>
+      </div>
+    </div>
+  </div>
 </div>
+
 
 <script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
 <script>
 
+var teacher_request_modal = document.getElementById('teacher-request');
+teacher_request_modal.addEventListener('show.bs.modal', function (event) {
+    var current_subtitles = $("#subtitle-current").html();
+    var button = event.relatedTarget;
+    var recipient = "{% for responsible_teacher in course.responsible_teachers.all %}@{{ responsible_teacher }} {% endfor %}";
+    var modalTitle = teacher_request_modal.querySelector('.modal-title');
+    var modalRecipient = teacher_request_modal.querySelector('.modal-body input');
+    var modalRequest = teacher_request_modal.querySelector('.modal-body textarea');
+    var modalTimestamp = teacher_request_modal.querySelector('#video-timestamp');
+
+   let player = videojs('videojs-player');
+    current_video_timestamp_secs = player.currentTime();
+    var date = new Date(null);
+    date.setSeconds(current_video_timestamp_secs);
+    var current_video_timestamp = date.toISOString().substr(11, 8);
+
+    modalTitle.textContent = 'Neue Anfrage an ' + recipient;
+    modalRecipient.value = recipient;
+    if (current_subtitles.length > 0) {
+        modalRequest.value = "Was ist mit: \"" + current_subtitles + "\" gemeint?";
+    } else {
+        modalRequest.value = "";
+    }
+    modalTimestamp.value = current_video_timestamp;
+});
 
 (function poll_details() {
   $.get('{% url 'lessons_details' course_id=course.id %}', function(data) {
@@ -74,7 +164,7 @@
          	    $(this).find(".lesson-recording-error-icon").removeClass("d-none");
          	});
    };
-   setTimeout(poll_details, 5000);
+   setTimeout(poll_details, 7000);
   });
 })();
 
@@ -85,33 +175,73 @@ $(".lesson-container").each(function() {
             $( this ).attr("aria-current","false")
             $( this ).removeClass("active");
         });
+         //in case we need to reinitialize -> the old player must be destroyed first for the next vid to load
+         if ( videojs.getAllPlayers().length > 0 ) {
+            var oldPlayer = document.getElementById('videojs-player');
+            videojs(oldPlayer).dispose();
+            $(".video-container").append('<video  id="videojs-player" width="auto" height="auto" class="video-js vjs-fill rounded-3 d-none" controls preload="auto"></video>');
+         }
+
         $(this).addClass("active");
         $(this).attr("aria-current","true")
-        $(".video-container").html("");
+        $("#videojs-player").removeClass("d-none");
+
         if(! $(this).attr("recording_video_archived_name")) {
             var html_template =`<div class="alert alert-warning" role="alert">Keine Aufzeichnung hinterlegt.</div>`;
             $(".video-container").append(html_template);
             return;
         }
-        var video_path = $(this).attr("recordings_url") + "/" + $(this).attr("recording_video_archived_name")
-        var html_template = `<video
-                width="auto"
-                height="auto
-                id="my-video"
-                class="video-js vjs-fill rounded-3"
-                controls
-                preload="auto"
-                data-setup='{"fluid": true, "width": auto, "height": auto}'>
-                <source src="${video_path}" type="video/mp4"/>
-                <p class="vjs-no-js">
-                  To view this video please enable JavaScript, and consider upgrading to a
-                  web browser that
-                  <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                </p>
-            </video>`
-        $(".video-container").append(html_template);
+        var video_path = $(this).attr("recordings_url") + "/" + $(this).attr("recording_video_archived_name");
+        var subtitles_path = $(this).attr("recordings_url") + "/" + $(this).attr("recording_text_archived_name");
+
+        let captionOptions = {
+            kind: 'metadata',
+            srclang: 'de',
+            label: 'Deutsch',
+            src: subtitles_path
+        };
+
+        let videoOptions = {
+                controls: true,
+                autoplay: false,
+                fluid: true,
+                preload: 'auto',
+                sources: [{
+                  src: video_path,
+                  type: 'video/mp4'
+                }]
+        };
+
+        let player = videojs('videojs-player', videoOptions);
+        player.ready(function(){
+            player.addRemoteTextTrack(captionOptions);
+            $("#subtitles-container").removeClass("d-none");
+            const textTrack = player.remoteTextTracks()[0];
+            var subtitles_previous = subtitles_current = "";
+            var subtitles_current_timestamp = "";
+            textTrack.addEventListener('cuechange', () => {
+                let activeCue = textTrack.activeCues[0];
+                if (activeCue === undefined) {
+                    return;
+                } else {
+                    //clear previous subtitles in case someone doesn't watch the video sequencially, e.g. clicks on the slider
+                    if (subtitles_current_timestamp < activeCue.startTime) {
+                        subtitles_previous = subtitles_current;
+                    } else {
+                        subtitles_previous = "";
+                    }
+                    subtitles_current_timestamp = activeCue.startTime;
+                    subtitles_current = activeCue.text;
+                    $("#subtitle-previous").html(subtitles_previous);
+                    $("#subtitle-current").html(subtitles_current);
+                }
+            })
+        });
+
     });
 });
+
+
 </script>
 
 {% endblock %}

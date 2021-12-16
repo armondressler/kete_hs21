@@ -6,7 +6,7 @@ import logging
 
 import requests
 
-from .webvtt_utils import create_vtt_from_azure_output
+from .webvtt_utils import create_vtt_from_azure_output, create_json_vtt_from_azure_output
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -32,6 +32,18 @@ def lessons(request, course_id):
     }
     return render(request=request, template_name="lesson/lessons.html", context=context)
 
+@login_required
+def debug(request, course_id):
+    corresponding_course = get_object_or_404(Course, id=course_id)
+    corresponding_lessons = Lesson.objects.filter(course=corresponding_course)
+    context = {
+        "recordings_url": settings.RECORDINGS_URL,
+        "lessons": corresponding_lessons,
+        "course": corresponding_course,
+        "is_teacher": request.user.groups.filter(name="teachers").exists()
+    }
+    return render(request=request, template_name="lesson/debug.html", context=context)
+
 
 @login_required()
 def delete(request, course_id, lesson_id, needs_redirect=False):
@@ -40,6 +52,27 @@ def delete(request, course_id, lesson_id, needs_redirect=False):
     if needs_redirect:
         return redirect(lessons)
     return redirect(lessons, course_id)
+
+
+@login_required()
+def subtitles(request, course_id, lesson_id):
+    lesson = get_object_or_404(Lesson, id=lesson_id)
+    recording = Recording.objects.filter(lesson=lesson)
+    if not recording:
+        return JsonResponse({"error": "Diese Lektion hat keine Aufnahme."}, status=404)
+    try:
+        with open(recording.recording_text_json_archived_name, "r") as subtitles_file:
+            vtt_content = subtitles_file.read()
+    except FileNotFoundError:
+        return JsonResponse({"error": "Das VTT-File für diese Aufnahme konnte nicht gefunden werden."})
+    except IOError:
+        return JsonResponse({"error": "Das VTT-File für diese Aufnahme konnte nicht geöffnet werden."})
+    json_response = {
+        "lesson_id": lesson.id,
+        "recording_id": recording.id,
+        "subtitles": vtt_content
+    }
+    return JsonResponse(json_response)
 
 
 def write_uploaded_file_to_storage(upload_file, upload_name):
@@ -136,10 +169,12 @@ def fetch_transcript_content(transcript_url, tts_api_key):
     transcript_response = requests.get(transcript_content_url)
     return transcript_response.json()
 
+
 def write_transcript_to_file(transcript, transcript_file_path):
     import json
     with open(transcript_file_path, "w") as transcript_file:
         json.dump(transcript, transcript_file)
+
 
 def _deprecated_fetch_via_azure_speech_to_text_api(tts_api_url, tts_api_key, audio_file_path):
     #Cant use this since azure doesnt do audio > 60 sec for this api ...
@@ -214,6 +249,13 @@ def translate_audio_to_text(recording_object_id):
     except IOError:
         logger.warning(f"Failed to write translated text to file {transcript_file_path}")
         recording.recording_audio_to_text_task_status = "error"
+
+    transcript_json_file_path = path.join(settings.RECORDINGS_ROOT, recording.recording_text_json_archived_name)
+    try:
+        create_json_vtt_from_azure_output(transcript_content, transcript_json_file_path)
+    except IOError:
+        logger.warning(f"Failed to write translated text to file {transcript_json_file_path}")
+        recording.recording_audio_to_text_task_status = "error"
     else:
         recording.recording_audio_to_text_task_status = "completed"
     recording.save()
@@ -250,6 +292,7 @@ def create(request, course_id):
                     recording_formdata.recording_video_archived_name = filename_full
                     recording_formdata.recording_audio_archived_name = filename_without_filetype + ".wav"
                     recording_formdata.recording_text_archived_name = filename_without_filetype + ".vtt"
+                    recording_formdata.recording_text_json_archived_name = filename_without_filetype + ".json"
                     recording_formdata.save()
                     run_background_task(create_audio_track_from_video, recording_formdata.id)
         else:

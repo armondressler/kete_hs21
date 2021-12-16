@@ -43,6 +43,7 @@ class Recording(models.Model):
     recording_video_archived_name = models.CharField(max_length=256, blank=True)
     recording_audio_archived_name = models.CharField(max_length=512, blank=True)
     recording_text_archived_name = models.CharField(max_length=512, blank=True)
+    recording_text_json_archived_name = models.CharField(max_length=512, blank=True)
     recording_audio_split_task_status = models.CharField(max_length=256, blank=True)
     recording_audio_to_text_task_status = models.CharField(max_length=256, blank=True)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
