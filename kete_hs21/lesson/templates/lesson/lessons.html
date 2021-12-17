@@ -9,7 +9,7 @@
 
 {% block content %}
 {% load static %}
-<div class="d-block align-items-stretch bg-transparent mx-1 " style="width: 380px; height: 1200px; margin-top:100px">
+<div class="d-block align-items-stretch bg-transparent mx-3" style="width: 380px; height: 1200px; margin-top:100px">
     <a class="d-block align-items-center link-dark text-decoration-none text-center">
       <span class="fs-5 fw-semibold">Verfügbare Lektionen: {{ course.name }}</span>
     </a>
@@ -47,9 +47,9 @@
     </div>
 </div>
 
-<div class="d-block w-75 mx-5 justify-content-start" style="margin-top:150px">
+<div class="d-inline-block w-75 justify-content-start" style="margin-top:150px">
     <div class="d-flex flex-nowrap flex-column" style="width: 66%">
-        <div class="video-container flex-fill">
+        <div class="video-container flex-fill ml-5">
         <video  id="videojs-player" width="auto" height="auto" class="video-js vjs-fill rounded-3 d-none" controls preload="auto"></video>
         </div>
         <div id="subtitles-container" class="d-flex flex-row mt-3 d-none">
@@ -78,6 +78,14 @@
                 </button>
             </div>
         </div>
+    </div>
+</div>
+<div class="d-block mx-2" style="margin-top:150px; width: 15%">
+    <div class="d-flex flex-column">
+        <image src="{% static 'images/example_slides/slide1.png' %}" width="auto" height="auto" class="py-2"/>
+        <image src="{% static 'images/example_slides/slide2.png' %}" width="auto" height="auto" class="py-2"/>
+        <image src="{% static 'images/example_slides/slide3.png' %}" width="auto" height="auto" class="py-2"/>
+        <image src="{% static 'images/example_slides/slide4.png' %}" width="auto" height="auto" class="py-2"/>
     </div>
 </div>
 

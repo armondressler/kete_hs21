@@ -17,8 +17,8 @@
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle {% if view_name in 'settings' %}active{% endif %}" href="{% url 'settings' %}" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
           <ul class="dropdown-menu" aria-labelledby="dropdown01">
-            <li><a class="dropdown-item" href="{% url 'settings' %}">Einstellungen</a></li>
             <li><a class="dropdown-item" href="{% url 'logout' %}">Ausloggen</a></li>
+            <li><a class="dropdown-item" href="{% url 'about' %}">Über</a></li>
           </ul>
         </li>
         <li class="nav-item">

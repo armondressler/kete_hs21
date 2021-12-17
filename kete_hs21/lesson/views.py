@@ -32,18 +32,6 @@ def lessons(request, course_id):
     }
     return render(request=request, template_name="lesson/lessons.html", context=context)
 
-@login_required
-def debug(request, course_id):
-    corresponding_course = get_object_or_404(Course, id=course_id)
-    corresponding_lessons = Lesson.objects.filter(course=corresponding_course)
-    context = {
-        "recordings_url": settings.RECORDINGS_URL,
-        "lessons": corresponding_lessons,
-        "course": corresponding_course,
-        "is_teacher": request.user.groups.filter(name="teachers").exists()
-    }
-    return render(request=request, template_name="lesson/debug.html", context=context)
-
 
 @login_required()
 def delete(request, course_id, lesson_id, needs_redirect=False):
