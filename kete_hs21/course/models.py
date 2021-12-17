@@ -11,7 +11,7 @@ class Course(models.Model):
     tags = TaggableManager(blank=True)
     date_created = models.DateTimeField(auto_now_add=True, verbose_name="Erstellt am")
     date_modified = models.DateTimeField(auto_now_add=True, verbose_name="Angepasst am")
-    created_by = models.ForeignKey(Profile, on_delete=models.DO_NOTHING, related_name="course_created_by", verbose_name="erstellt von")
+    created_by = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="course_created_by", verbose_name="erstellt von")
     responsible_teachers = models.ManyToManyField(Profile, through="CourseResponsibleTeachers", related_name="course_responsible_teacher", verbose_name="Verantwortliche Dozenten")
     subscribed_students = models.ManyToManyField(Profile, through="CourseSubscribedStudents", related_name="course_subscribed_students", verbose_name="Eingeschriebene Studenten")
 
@@ -26,13 +26,13 @@ class Lesson(models.Model):
 
 
 class CourseResponsibleTeachers(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.DO_NOTHING)
-    teacher = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
 
 class CourseSubscribedStudents(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.DO_NOTHING)
-    student = models.ForeignKey(Profile, on_delete=models.DO_NOTHING)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    student = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
 
 class Recording(models.Model):

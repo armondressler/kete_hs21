@@ -2,12 +2,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 
 from django.shortcuts import render, redirect
-from .models import Course
+from .models import Course, CourseResponsibleTeachers, CourseSubscribedStudents
 from .forms import CourseForm
 from django.contrib import messages
 
 
-# Create your views here.
 @login_required
 def courses(request):
     context = {
@@ -18,8 +17,10 @@ def courses(request):
 
 @login_required()
 def delete(request, course_id):
-    obj = get_object_or_404(Course, id=course_id)
-    obj.delete()
+    this_course = get_object_or_404(Course, id=course_id)
+    #CourseResponsibleTeachers().course.remove(this_course)
+    #CourseSubscribedStudents().course.remove(this_course)
+    this_course.delete()
     return redirect(courses)
 
 @login_required
@@ -55,3 +56,4 @@ def update(request, course_id):
                    'course': obj,
                    'error': 'Fehler beim Anpassen des Moduls.'}
         return render(request, template_name="update.html", context=context)
+
