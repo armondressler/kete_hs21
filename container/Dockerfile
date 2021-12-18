@@ -1,7 +1,7 @@
 FROM python:3.10
 
-RUN apt-get update && \
-    apt-get upgrade && \
+RUN apt-get update -y && \
+    apt-get upgrade -y && \
     apt-get install -y nginx supervisor ffmpeg
 
 RUN /usr/local/bin/python -m pip install gunicorn==20.1.0 django==3.2.9

@@ -43,7 +43,6 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'subtitle_builder.apps.SubtitleBuilderConfig',
     'base.apps.BaseConfig',
     'course.apps.CourseConfig',
     'lesson.apps.LessonConfig',
