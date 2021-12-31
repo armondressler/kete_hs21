@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-from os import environ
+from os import environ, path, mkdir
 from django.core.management import utils
 import logging
 
@@ -92,13 +92,17 @@ WSGI_APPLICATION = 'kete_hs21.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+DB_DIR = path.join(BASE_DIR, "database")
+if not path.isdir(DB_DIR):
+    logger.info(f"Creating database dir {DB_DIR}")
+    mkdir(DB_DIR)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': path.join(DB_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -177,11 +181,11 @@ RECORDINGS_ROOT = MEDIA_ROOT / "recordings"
 
 SLIDESHOWS_ROOT = MEDIA_ROOT / "slideshows"
 
-import os
+
 for media_dir in (MEDIA_ROOT, RECORDINGS_ROOT, SLIDESHOWS_ROOT):
-    if not os.path.isdir(media_dir):
-        logger.info(f"Creating missing MEDIA_DIRS {MEDIA_ROOT}, {RECORDINGS_ROOT}, {SLIDESHOWS_ROOT}")
-        os.mkdir(media_dir)
+    if not path.isdir(media_dir):
+        logger.info(f"Creating missing MEDIA_DIR {media_dir}")
+        mkdir(media_dir)
 
 
 #Azure TTS API
