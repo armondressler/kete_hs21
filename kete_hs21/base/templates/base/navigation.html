@@ -15,6 +15,13 @@
           <a class="nav-link {% if view_name == 'courses' %}active{% endif %}" aria-current="page" href="{% url 'courses' %}">Module</a>
         </li>
         <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="dropdown02" data-bs-toggle="dropdown" aria-expanded="false">Axure Prototypen</a>
+          <ul class="dropdown-menu" aria-labelledby="dropdown02">
+            <li><a class="dropdown-item" href="{% url 'prototype_student' %}">Student</a></li>
+            <li><a class="dropdown-item" href="{% url 'prototype_teacher' %}">Dozent</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle {% if view_name in 'settings' %}active{% endif %}" href="{% url 'settings' %}" id="dropdown01" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
           <ul class="dropdown-menu" aria-labelledby="dropdown01">
             <li><a class="dropdown-item" href="{% url 'logout' %}">Ausloggen</a></li>
