@@ -15,3 +15,9 @@ def root(request):
 
 def about(request):
     return redirect("https://github.com/armondressler/kete_hs21/blob/main/README.md")
+
+def prototype_student(request):
+    return redirect("/prototype/student")
+
+def prototype_teacher(request):
+    return redirect("/prototype/teacher")

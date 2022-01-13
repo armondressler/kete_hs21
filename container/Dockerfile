@@ -29,6 +29,8 @@ RUN groupadd -g 1000 gunicorn && \
     chmod u+x /usr/local/bin/init.sh && \
     chown gunicorn:gunicorn /usr/local/bin/init.sh
 
+COPY container/files/axure_prototype/ /var/www/html
+
 EXPOSE 8080
 	
 ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
